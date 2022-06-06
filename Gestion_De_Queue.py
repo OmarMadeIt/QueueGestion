@@ -45,7 +45,7 @@ def main():
             dt_jour=now.strftime("%d/%m/%Y")
             dt_heure = now.strftime("%H:%M:%S")
             st.write("Bonjour "+Prenom)
-            st.write("Nous sommes le "dt_jour)
+            st.write("Nous sommes le ",dt_jour)
             st.write("Il est : ", dt_heure)
             st.write("Vous êtes le numéro "+str(st.session_state.n_init))
             #results = Prenom+Nom+'@gmail.com'
