@@ -22,6 +22,7 @@ now=datetime.now()
 #liste_num=[]
 #@st.cache
 def main():
+    state = _get_state()
     global n_init
     st.title("Application de gestion de Queue INNOV Salon")
     st.subheader("Version Test")
@@ -50,6 +51,7 @@ def main():
             st.write("Vous êtes le numéro "+str(st.session_state.n_init))
             #results = Prenom+Nom+'@gmail.com'
             #st.write(results)
+    state.sync()
         
 if __name__=='__main__':
     main()
