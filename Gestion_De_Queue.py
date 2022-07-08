@@ -32,7 +32,7 @@ with server_state_lock["liste_num"]:  # Lock the "count" state for thread-safety
 #now=datetime.now()
 #n_init = 0
 #liste_num=[]
-#server_state.n_init=0
+server_state.n_init=0
 #@st.cache
 def main():
     global n_init
