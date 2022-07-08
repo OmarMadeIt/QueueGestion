@@ -29,22 +29,24 @@ with server_state_lock["liste_num"]:  # Lock the "count" state for thread-safety
         server_state.liste_num = []
 #if 'liste_num' not in st.session_state:
     #st.session_state.liste_num = []
-now=datetime.now()
+#now=datetime.now()
 #n_init = 0
 #liste_num=[]
+#server_state.n_init=0
 #@st.cache
 def main():
     global n_init
     st.title("Application de gestion de fil d'attente INNOV Salon")
-    st.subheader("Renseignez votre prénom et votre numéro de téléphone")
+    st.subheader("Renseignez votre numéro de téléphone")
     
     with st.form(key='myform', clear_on_submit=True):
-        Prenom = st.text_input("Prénom")
+        #Prenom = st.text_input("Prénom")
         num_tel = st.text_input("Votre numéro de téléphone")
         submit_button = st.form_submit_button("Valider")
         
     if submit_button:
         st.info("Résultats")
+        #now=datetime.now()
         #num_tel = input("Merci d'indiquer votre numéro de téléphone ? : ")
         if num_tel in server_state.liste_num:
             st.write("Vous ne pouvez pas vous inscrire, vous êtes déjà sur la liste")
@@ -56,10 +58,15 @@ def main():
                 server_state.n_init=server_state.n_init+1
     #st.write("Vous êtes le numéro "+str(server_state.n_init))
             #dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            
+            dt_jour=now.strftime("%d/%m/%Y")
+            dt_heure = now.strftime("%H:%M:%S")
+            #st.write("Bonjour "+Prenom)
     now=datetime.now()
     dt_jour=now.strftime("%d/%m/%Y")
     dt_heure = now.strftime("%H:%M:%S")
-    st.write("Bonjour "+Prenom)
+    st.write("Bonjour,")
+    st.write("Votre numéro de téléphone est le: "+num_tel)
     st.write("Nous sommes le ",dt_jour)
     st.write("Il est : ", dt_heure)
     st.write("Vous êtes le numéro "+str(server_state.n_init))
