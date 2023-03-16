@@ -26,16 +26,28 @@ if maintenant == minuit:
     c.execute("DELETE FROM clients")
     num_attente = 1
 
+# Vérification si le numéro de téléphone est déjà dans la file d'attente
+def check_duplicate_phone_num(phone_num):
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
+    c.execute("SELECT COUNT(*) FROM clients WHERE telephone = ? AND date LIKE ?", (phone_num, today+'%'))
+    result = c.fetchone()
+    if result[0] >= 2:
+        return True
+    return False
+
 # Affichage de la page web
 st.title("Salon de coiffure")
 
 nom = st.text_input("Nom :")
 telephone = st.text_input("Téléphone :")
 
-if st.button("Soumettre"):
-    # Ajout du client dans la base de données
-    c.execute("INSERT INTO clients (nom, telephone) VALUES (?, ?)", (nom, telephone))
-    conn.commit()
+if check_duplicate_phone_num(telephone):
+    st.warning("Ce numéro est déjà dans la file d'attente.")
+else:
+    if st.button("Soumettre"):
+        # Ajout du client dans la base de données
+        c.execute("INSERT INTO clients (nom, telephone) VALUES (?, ?)", (nom, telephone))
+        conn.commit()
 
-    # Affichage du numéro d'attente
-    st.write("Votre numéro d'attente est :", num_attente)
+        # Affichage du numéro d'attente
+        st.write("Votre numéro d'attente est :", num_attente)
