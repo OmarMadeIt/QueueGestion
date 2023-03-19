@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import datetime
 
+st.session_state.setdefault('user_id', 'proprietaire')
 # Identifiant du propriétaire
 owner_id = "1234"
 
