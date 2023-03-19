@@ -15,7 +15,8 @@ c.execute('''CREATE TABLE IF NOT EXISTS clients
 conn.commit()
 
 # Récupération du nombre de clients en attente
-c.execute("SELECT COUNT(*) FROM clients")
+today = datetime.datetime.now().strftime('%Y-%m-%d')
+c.execute(f"SELECT COUNT(*) FROM clients WHERE date LIKE '{today}%'")
 result = c.fetchone()
 num_attente = result[0] + 1
 
@@ -28,10 +29,9 @@ if maintenant == minuit:
 
 # Vérification si le numéro de téléphone est déjà dans la file d'attente
 def check_duplicate_phone_num(phone_num):
-    today = datetime.datetime.now().strftime('%Y-%m-%d')
-    c.execute("SELECT COUNT(*) FROM clients WHERE telephone = ? AND date LIKE ?", (phone_num, today+'%'))
+    c.execute(f"SELECT COUNT(*) FROM clients WHERE telephone = ? AND date LIKE '{today}%' ", (phone_num,))
     result = c.fetchone()
-    if result[0] >= 2:
+    if result[0] >= 1:
         return True
     return False
 
@@ -48,6 +48,11 @@ else:
         # Ajout du client dans la base de données
         c.execute("INSERT INTO clients (nom, telephone) VALUES (?, ?)", (nom, telephone))
         conn.commit()
+
+        # Récupération du numéro d'attente
+        c.execute(f"SELECT COUNT(*) FROM clients WHERE date LIKE '{today}%'")
+        result = c.fetchone()
+        num_attente = result[0]
 
         # Affichage du numéro d'attente
         st.write("Votre numéro d'attente est :", num_attente)
