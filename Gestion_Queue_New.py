@@ -2,6 +2,9 @@ import streamlit as st
 import sqlite3
 import datetime
 
+# Identifiant du propriétaire
+owner_id = "1234"
+
 # Connexion à la base de données
 conn = sqlite3.connect('clients.db')
 c = conn.cursor()
@@ -35,6 +38,10 @@ def check_duplicate_phone_num(phone_num):
         return True
     return False
 
+# Vérification si l'utilisateur est le propriétaire
+def is_owner(user_id):
+    return user_id == owner_id
+
 # Affichage de la page web
 st.title("Salon de coiffure")
 
@@ -56,3 +63,20 @@ else:
 
         # Affichage du numéro d'attente
         st.write("Votre numéro d'attente est :", num_attente)
+
+# Affichage de la liste des clients en attente pour le propriétaire uniquement
+if is_owner(st.session_state.user_id):
+    if st.button("Voir la liste des clients en attente"):
+        c.execute(f"SELECT * FROM clients WHERE date LIKE '{today}%' ORDER BY id ASC")
+        results = c.fetchall()
+
+        if len(results) == 0:
+            st.write("Aucun client en attente pour le moment.")
+        else:
+            st.write("Liste des clients en attente :")
+            table = []
+            for row in results:
+                table.append([row[0], row[1], row[2]])
+            st.table(table)
+else:
+    st.warning("Vous n'êtes pas autorisé à accéder à cette fonctionnalité.")
